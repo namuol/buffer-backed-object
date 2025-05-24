@@ -6,7 +6,7 @@ export type Descriptor<T = any> = {
   set(dataview: DataView, byteOffset: number, value: T): void;
 };
 
-type ExtendedDescriptor<T = any> = Descriptor<T> & { offset: number };
+export type ExtendedDescriptor<T = any> = Descriptor<T> & { offset: number };
 
 export type Descriptors<T = Descriptor<any>> = {
   [key: string]: T;

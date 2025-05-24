@@ -6,6 +6,9 @@ declare module "buffer-backed-object" {
         get(dataview: DataView, byteOffset: number): T;
         set(dataview: DataView, byteOffset: number, value: T): void;
     };
+    export type ExtendedDescriptor<T = any> = Descriptor<T> & {
+        offset: number;
+    };
     export type Descriptors<T = Descriptor<any>> = {
         [key: string]: T;
     };
