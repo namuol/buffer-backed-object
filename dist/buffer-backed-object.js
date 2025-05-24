@@ -211,6 +211,7 @@ function L(t) {
     type: "NestedBufferBackedObject",
     align: b(t),
     size: e,
+    innerDescriptors: t,
     get: (n, i) => y(n.buffer, t, {
       byteOffset: n.byteOffset + i,
       length: 1
@@ -226,6 +227,7 @@ function N(t, e) {
     type: "NestedArrayOfBufferBackedObjects",
     align: Object.values(e)[0].align ?? 1,
     size: n,
+    innerDescriptors: e,
     get: (i, r) => y(i.buffer, e, {
       byteOffset: r + i.byteOffset,
       length: t
@@ -268,6 +270,7 @@ export {
   T as Uint16,
   w as Uint32,
   M as Uint8,
+  a as nextAlign,
   v as reserved,
   b as structAlign,
   U as structSize

@@ -5,6 +5,7 @@ declare module "buffer-backed-object" {
         align?: number;
         get(dataview: DataView, byteOffset: number): T;
         set(dataview: DataView, byteOffset: number, value: T): void;
+        innerDescriptors?: Descriptors<any>;
     };
     export type ExtendedDescriptor<T = any> = Descriptor<T> & {
         offset: number;
@@ -15,6 +16,10 @@ declare module "buffer-backed-object" {
     export type DecodedBuffer<E extends Descriptors> = {
         [K in keyof E]: ReturnType<E[K]["get"]>;
     };
+    /**
+     * Returns the next integer bigger than `current` that has the desirged alignment.
+     */
+    export function nextAlign(current: number, align: number): number;
     export function structSize(descriptors: Descriptors): number;
     export function structAlign(descriptors: Descriptors): number;
     export function ArrayOfBufferBackedObjects<T extends Descriptors>(buffer: ArrayBuffer, descriptors: T, { byteOffset, length, align }?: {

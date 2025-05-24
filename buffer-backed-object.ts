@@ -4,6 +4,7 @@ export type Descriptor<T = any> = {
   align?: number;
   get(dataview: DataView, byteOffset: number): T;
   set(dataview: DataView, byteOffset: number, value: T): void;
+  innerDescriptors?: Descriptors<any>;
 };
 
 export type ExtendedDescriptor<T = any> = Descriptor<T> & { offset: number };
@@ -29,7 +30,7 @@ function isNumber(s: any): s is number {
 /**
  * Returns the next integer bigger than `current` that has the desirged alignment.
  */
-function nextAlign(current: number, align: number): number {
+export function nextAlign(current: number, align: number): number {
   let aligned = current - (current % align);
   if (current % align != 0) {
     aligned += align;
@@ -329,6 +330,7 @@ export function NestedBufferBackedObject<T extends Descriptors>(
     type: "NestedBufferBackedObject",
     align: structAlign(descriptors),
     size,
+    innerDescriptors: descriptors,
     get: (dataView, byteOffset) =>
       ArrayOfBufferBackedObjects(dataView.buffer, descriptors, {
         byteOffset: dataView.byteOffset + byteOffset,
@@ -349,6 +351,7 @@ export function NestedArrayOfBufferBackedObjects<T extends Descriptors>(
     type: "NestedArrayOfBufferBackedObjects",
     align: Object.values(descriptors)[0].align ?? 1,
     size,
+    innerDescriptors: descriptors,
     get: (dataView, byteOffset) =>
       ArrayOfBufferBackedObjects(dataView.buffer, descriptors, {
         byteOffset: byteOffset + dataView.byteOffset,
