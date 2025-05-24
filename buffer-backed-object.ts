@@ -1,4 +1,5 @@
 export type Descriptor<T = any> = {
+  type: string;
   size: number;
   align?: number;
   get(dataview: DataView, byteOffset: number): T;
@@ -161,6 +162,7 @@ export function Uint16({
   }
   const littleEndian = endianness === "little";
   return {
+    type: "Uint16",
     align,
     size: Uint16Array.BYTES_PER_ELEMENT,
     get: (dataView, byteOffset) => dataView.getUint16(byteOffset, littleEndian),
@@ -178,6 +180,7 @@ export function Uint32({
   }
   const littleEndian = endianness === "little";
   return {
+    type: "Uint32",
     align,
     size: Uint32Array.BYTES_PER_ELEMENT,
     get: (dataView, byteOffset) => dataView.getUint32(byteOffset, littleEndian),
@@ -195,6 +198,7 @@ export function Int16({
   }
   const littleEndian = endianness === "little";
   return {
+    type: "Int16",
     align,
     size: Int16Array.BYTES_PER_ELEMENT,
     get: (dataView, byteOffset) => dataView.getInt16(byteOffset, littleEndian),
@@ -212,6 +216,7 @@ export function Int32({
   }
   const littleEndian = endianness === "little";
   return {
+    type: "Int32",
     align,
     size: Int32Array.BYTES_PER_ELEMENT,
     get: (dataView, byteOffset) => dataView.getInt32(byteOffset, littleEndian),
@@ -229,6 +234,7 @@ export function Float32({
   }
   const littleEndian = endianness === "little";
   return {
+    type: "Float32",
     align,
     size: Float32Array.BYTES_PER_ELEMENT,
     get: (dataView, byteOffset) =>
@@ -247,6 +253,7 @@ export function Float64({
   }
   const littleEndian = endianness === "little";
   return {
+    type: "Float64",
     align,
     size: Float64Array.BYTES_PER_ELEMENT,
     get: (dataView, byteOffset) =>
@@ -265,6 +272,7 @@ export function BigInt64({
   }
   const littleEndian = endianness === "little";
   return {
+    type: "BigInt64",
     align,
     size: BigInt64Array.BYTES_PER_ELEMENT,
     get: (dataView, byteOffset) =>
@@ -283,6 +291,7 @@ export function BigUint64({
   }
   const littleEndian = endianness === "little";
   return {
+    type: "BigUint64",
     align,
     size: BigUint64Array.BYTES_PER_ELEMENT,
     get: (dataView, byteOffset) =>
@@ -294,6 +303,7 @@ export function BigUint64({
 
 export function Uint8(): Descriptor<number> {
   return {
+    type: "Uint8",
     align: 1,
     size: 1,
     get: (dataView, byteOffset) => dataView.getUint8(byteOffset),
@@ -303,6 +313,7 @@ export function Uint8(): Descriptor<number> {
 
 export function Int8(): Descriptor<number> {
   return {
+    type: "Int8",
     align: 1,
     size: 1,
     get: (dataView, byteOffset) => dataView.getInt8(byteOffset),
@@ -315,6 +326,7 @@ export function NestedBufferBackedObject<T extends Descriptors>(
 ): Descriptor<DecodedBuffer<T>> {
   const size = structSize(descriptors);
   return {
+    type: "NestedBufferBackedObject",
     align: structAlign(descriptors),
     size,
     get: (dataView, byteOffset) =>
@@ -334,6 +346,7 @@ export function NestedArrayOfBufferBackedObjects<T extends Descriptors>(
 ): Descriptor<Array<DecodedBuffer<T>>> {
   const size = structSize(descriptors) * length;
   return {
+    type: "NestedArrayOfBufferBackedObjects",
     align: Object.values(descriptors)[0].align ?? 1,
     size,
     get: (dataView, byteOffset) =>
@@ -349,6 +362,7 @@ export function NestedArrayOfBufferBackedObjects<T extends Descriptors>(
 
 export function UTF8String(maxBytes: number): Descriptor<string> {
   return {
+    type: "UTF8String",
     align: 1,
     size: maxBytes,
     get: (dataView, byteOffset) =>
@@ -365,5 +379,5 @@ export function UTF8String(maxBytes: number): Descriptor<string> {
 }
 
 export function reserved(size: number): Descriptor<void> {
-  return { align: 1, size, get() {}, set() {} };
+  return { type: "reserved", align: 1, size, get() {}, set() {} };
 }
