@@ -412,3 +412,95 @@ test("Nested NestedBufferBackedObjects", function () {
   expect(f32[1]).toBe(2);
   expect(f32[2]).toBe(3);
 });
+
+test("Vector types work correctly", function () {
+  const descriptors = {
+    vec2: BBO.Float32x2(),
+    vec3: BBO.Float32x3(),
+    vec4: BBO.Float32x4(),
+    uvec2: BBO.Uint32x2(),
+    uvec3: BBO.Uint32x3(),
+    uvec4: BBO.Uint32x4(),
+    ivec2: BBO.Int32x2(),
+    ivec3: BBO.Int32x3(),
+    ivec4: BBO.Int32x4(),
+  };
+
+  const buffer = new ArrayBuffer(BBO.structSize(descriptors));
+  const view = BBO.BufferBackedObject(buffer, descriptors);
+
+  // Test Float32 vectors
+  view.vec2.x = 1;
+  view.vec2.y = 2;
+  expect(view.vec2.x).toBe(1);
+  expect(view.vec2.y).toBe(2);
+  expect(view.vec2.r).toBe(1); // Test color alias
+  expect(view.vec2.g).toBe(2); // Test color alias
+
+  view.vec3.x = 3;
+  view.vec3.y = 4;
+  view.vec3.z = 5;
+  expect(view.vec3.x).toBe(3);
+  expect(view.vec3.y).toBe(4);
+  expect(view.vec3.z).toBe(5);
+  expect(view.vec3.r).toBe(3); // Test color alias
+  expect(view.vec3.g).toBe(4); // Test color alias
+  expect(view.vec3.b).toBe(5); // Test color alias
+
+  view.vec4.x = 6;
+  view.vec4.y = 7;
+  view.vec4.z = 8;
+  view.vec4.w = 9;
+  expect(view.vec4.x).toBe(6);
+  expect(view.vec4.y).toBe(7);
+  expect(view.vec4.z).toBe(8);
+  expect(view.vec4.w).toBe(9);
+  expect(view.vec4.r).toBe(6); // Test color alias
+  expect(view.vec4.g).toBe(7); // Test color alias
+  expect(view.vec4.b).toBe(8); // Test color alias
+  expect(view.vec4.a).toBe(9); // Test color alias
+
+  // Test Uint32 vectors
+  view.uvec2.x = 10;
+  view.uvec2.y = 11;
+  expect(view.uvec2.x).toBe(10);
+  expect(view.uvec2.y).toBe(11);
+
+  view.uvec3.x = 12;
+  view.uvec3.y = 13;
+  view.uvec3.z = 14;
+  expect(view.uvec3.x).toBe(12);
+  expect(view.uvec3.y).toBe(13);
+  expect(view.uvec3.z).toBe(14);
+
+  view.uvec4.x = 15;
+  view.uvec4.y = 16;
+  view.uvec4.z = 17;
+  view.uvec4.w = 18;
+  expect(view.uvec4.x).toBe(15);
+  expect(view.uvec4.y).toBe(16);
+  expect(view.uvec4.z).toBe(17);
+  expect(view.uvec4.w).toBe(18);
+
+  // Test Int32 vectors
+  view.ivec2.x = -1;
+  view.ivec2.y = -2;
+  expect(view.ivec2.x).toBe(-1);
+  expect(view.ivec2.y).toBe(-2);
+
+  view.ivec3.x = -3;
+  view.ivec3.y = -4;
+  view.ivec3.z = -5;
+  expect(view.ivec3.x).toBe(-3);
+  expect(view.ivec3.y).toBe(-4);
+  expect(view.ivec3.z).toBe(-5);
+
+  view.ivec4.x = -6;
+  view.ivec4.y = -7;
+  view.ivec4.z = -8;
+  view.ivec4.w = -9;
+  expect(view.ivec4.x).toBe(-6);
+  expect(view.ivec4.y).toBe(-7);
+  expect(view.ivec4.z).toBe(-8);
+  expect(view.ivec4.w).toBe(-9);
+});

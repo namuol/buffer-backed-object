@@ -51,4 +51,58 @@ declare module "buffer-backed-object" {
     export function NestedArrayOfBufferBackedObjects<T extends Descriptors>(length: number, descriptors: T): Descriptor<Array<DecodedBuffer<T>>>;
     export function UTF8String(maxBytes: number): Descriptor<string>;
     export function reserved(size: number): Descriptor<void>;
+    export function Float32x2({ endianness, align, }?: Partial<EndiannessOption & AlignOption>): Descriptor<{
+        x: number;
+        y: number;
+        r: number;
+        g: number;
+    }>;
+    export function Float32x3({ endianness, align, }?: Partial<EndiannessOption & AlignOption>): Descriptor<{
+        x: number;
+        y: number;
+        z: number;
+        r: number;
+        g: number;
+        b: number;
+    }>;
+    export function Float32x4({ endianness, align, }?: Partial<EndiannessOption & AlignOption>): Descriptor<{
+        x: number;
+        y: number;
+        z: number;
+        w: number;
+        r: number;
+        g: number;
+        b: number;
+        a: number;
+    }>;
+    export function Uint32x2({ endianness, align, }?: Partial<EndiannessOption & AlignOption>): Descriptor<{
+        x: number;
+        y: number;
+    }>;
+    export function Uint32x3({ endianness, align, }?: Partial<EndiannessOption & AlignOption>): Descriptor<{
+        x: number;
+        y: number;
+        z: number;
+    }>;
+    export function Uint32x4({ endianness, align, }?: Partial<EndiannessOption & AlignOption>): Descriptor<{
+        x: number;
+        y: number;
+        z: number;
+        w: number;
+    }>;
+    export function Int32x2({ endianness, align, }?: Partial<EndiannessOption & AlignOption>): Descriptor<{
+        x: number;
+        y: number;
+    }>;
+    export function Int32x3({ endianness, align, }?: Partial<EndiannessOption & AlignOption>): Descriptor<{
+        x: number;
+        y: number;
+        z: number;
+    }>;
+    export function Int32x4({ endianness, align, }?: Partial<EndiannessOption & AlignOption>): Descriptor<{
+        x: number;
+        y: number;
+        z: number;
+        w: number;
+    }>;
 }

@@ -59,6 +59,7 @@ export function ArrayOfBufferBackedObjects<T extends Descriptors>(
   const dataView = new DataView(buffer, byteOffset);
   let stride = 0;
   // Copy the descriptors.
+  //
   // @ts-ignore We will fix up the missing `offset` below
   const extendedDescriptors: Descriptors<ExtendedDescriptor<any>> = {
     ...descriptors,
@@ -337,7 +338,7 @@ export function NestedBufferBackedObject<T extends Descriptors>(
         length: 1,
       })[0],
     set: (dataView, byteOffset, value) => {
-      throw Error("Can’t set an entire struct");
+      throw Error("Cannot set an entire struct");
     },
   };
 }
@@ -358,7 +359,7 @@ export function NestedArrayOfBufferBackedObjects<T extends Descriptors>(
         length,
       }),
     set: (dataView, byteOffset, value) => {
-      throw Error("Can’t set an entire array");
+      throw Error("Cannot set an entire array");
     },
   };
 }
@@ -383,4 +384,287 @@ export function UTF8String(maxBytes: number): Descriptor<string> {
 
 export function reserved(size: number): Descriptor<void> {
   return { type: "reserved", align: 1, size, get() {}, set() {} };
+}
+
+export function Float32x2({
+  endianness = "little",
+  align = 4,
+}: Partial<EndiannessOption & AlignOption> = {}): Descriptor<{
+  x: number;
+  y: number;
+  r: number;
+  g: number;
+}> {
+  const base = {
+    x: Float32({ endianness, align }),
+    y: Float32({ endianness, align }),
+  };
+  const descriptor = NestedBufferBackedObject(base);
+  return {
+    ...descriptor,
+    get: (dataView, byteOffset) => {
+      const obj = descriptor.get(dataView, byteOffset) as {
+        x: number;
+        y: number;
+      };
+      return new Proxy(obj, {
+        get(target: { x: number; y: number }, prop: string | symbol) {
+          if (prop === "r") return target.x;
+          if (prop === "g") return target.y;
+          return target[prop as keyof typeof target];
+        },
+        set(
+          target: { x: number; y: number },
+          prop: string | symbol,
+          value: number
+        ) {
+          if (prop === "r") {
+            target.x = value;
+            return true;
+          }
+          if (prop === "g") {
+            target.y = value;
+            return true;
+          }
+          (target as any)[prop] = value;
+          return true;
+        },
+      }) as { x: number; y: number; r: number; g: number };
+    },
+  };
+}
+
+export function Float32x3({
+  endianness = "little",
+  align = 4,
+}: Partial<EndiannessOption & AlignOption> = {}): Descriptor<{
+  x: number;
+  y: number;
+  z: number;
+  r: number;
+  g: number;
+  b: number;
+}> {
+  const base = {
+    x: Float32({ endianness, align }),
+    y: Float32({ endianness, align }),
+    z: Float32({ endianness, align }),
+  };
+  const descriptor = NestedBufferBackedObject(base);
+  return {
+    ...descriptor,
+    get: (dataView, byteOffset) => {
+      const obj = descriptor.get(dataView, byteOffset) as {
+        x: number;
+        y: number;
+        z: number;
+      };
+      return new Proxy(obj, {
+        get(
+          target: { x: number; y: number; z: number },
+          prop: string | symbol
+        ) {
+          if (prop === "r") return target.x;
+          if (prop === "g") return target.y;
+          if (prop === "b") return target.z;
+          return target[prop as keyof typeof target];
+        },
+        set(
+          target: { x: number; y: number; z: number },
+          prop: string | symbol,
+          value: number
+        ) {
+          if (prop === "r") {
+            target.x = value;
+            return true;
+          }
+          if (prop === "g") {
+            target.y = value;
+            return true;
+          }
+          if (prop === "b") {
+            target.z = value;
+            return true;
+          }
+          (target as any)[prop] = value;
+          return true;
+        },
+      }) as {
+        x: number;
+        y: number;
+        z: number;
+        r: number;
+        g: number;
+        b: number;
+      };
+    },
+  };
+}
+
+export function Float32x4({
+  endianness = "little",
+  align = 4,
+}: Partial<EndiannessOption & AlignOption> = {}): Descriptor<{
+  x: number;
+  y: number;
+  z: number;
+  w: number;
+  r: number;
+  g: number;
+  b: number;
+  a: number;
+}> {
+  const base = {
+    x: Float32({ endianness, align }),
+    y: Float32({ endianness, align }),
+    z: Float32({ endianness, align }),
+    w: Float32({ endianness, align }),
+  };
+  const descriptor = NestedBufferBackedObject(base);
+  return {
+    ...descriptor,
+    get: (dataView, byteOffset) => {
+      const obj = descriptor.get(dataView, byteOffset) as {
+        x: number;
+        y: number;
+        z: number;
+        w: number;
+      };
+      return new Proxy(obj, {
+        get(
+          target: { x: number; y: number; z: number; w: number },
+          prop: string | symbol
+        ) {
+          if (prop === "r") return target.x;
+          if (prop === "g") return target.y;
+          if (prop === "b") return target.z;
+          if (prop === "a") return target.w;
+          return target[prop as keyof typeof target];
+        },
+        set(
+          target: { x: number; y: number; z: number; w: number },
+          prop: string | symbol,
+          value: number
+        ) {
+          if (prop === "r") {
+            target.x = value;
+            return true;
+          }
+          if (prop === "g") {
+            target.y = value;
+            return true;
+          }
+          if (prop === "b") {
+            target.z = value;
+            return true;
+          }
+          if (prop === "a") {
+            target.w = value;
+            return true;
+          }
+          (target as any)[prop] = value;
+          return true;
+        },
+      }) as {
+        x: number;
+        y: number;
+        z: number;
+        w: number;
+        r: number;
+        g: number;
+        b: number;
+        a: number;
+      };
+    },
+  };
+}
+
+export function Uint32x2({
+  endianness = "little",
+  align = 4,
+}: Partial<EndiannessOption & AlignOption> = {}): Descriptor<{
+  x: number;
+  y: number;
+}> {
+  return NestedBufferBackedObject({
+    x: Uint32({ endianness, align }),
+    y: Uint32({ endianness, align }),
+  });
+}
+
+export function Uint32x3({
+  endianness = "little",
+  align = 4,
+}: Partial<EndiannessOption & AlignOption> = {}): Descriptor<{
+  x: number;
+  y: number;
+  z: number;
+}> {
+  return NestedBufferBackedObject({
+    x: Uint32({ endianness, align }),
+    y: Uint32({ endianness, align }),
+    z: Uint32({ endianness, align }),
+  });
+}
+
+export function Uint32x4({
+  endianness = "little",
+  align = 4,
+}: Partial<EndiannessOption & AlignOption> = {}): Descriptor<{
+  x: number;
+  y: number;
+  z: number;
+  w: number;
+}> {
+  return NestedBufferBackedObject({
+    x: Uint32({ endianness, align }),
+    y: Uint32({ endianness, align }),
+    z: Uint32({ endianness, align }),
+    w: Uint32({ endianness, align }),
+  });
+}
+
+export function Int32x2({
+  endianness = "little",
+  align = 4,
+}: Partial<EndiannessOption & AlignOption> = {}): Descriptor<{
+  x: number;
+  y: number;
+}> {
+  return NestedBufferBackedObject({
+    x: Int32({ endianness, align }),
+    y: Int32({ endianness, align }),
+  });
+}
+
+export function Int32x3({
+  endianness = "little",
+  align = 4,
+}: Partial<EndiannessOption & AlignOption> = {}): Descriptor<{
+  x: number;
+  y: number;
+  z: number;
+}> {
+  return NestedBufferBackedObject({
+    x: Int32({ endianness, align }),
+    y: Int32({ endianness, align }),
+    z: Int32({ endianness, align }),
+  });
+}
+
+export function Int32x4({
+  endianness = "little",
+  align = 4,
+}: Partial<EndiannessOption & AlignOption> = {}): Descriptor<{
+  x: number;
+  y: number;
+  z: number;
+  w: number;
+}> {
+  return NestedBufferBackedObject({
+    x: Int32({ endianness, align }),
+    y: Int32({ endianness, align }),
+    z: Int32({ endianness, align }),
+    w: Int32({ endianness, align }),
+  });
 }
